@@ -10,18 +10,18 @@ import {
 
 function LandingPage({ onGetStarted }: { onGetStarted: () => void }) {
   return (
-    <div className="min-h-screen bg-transparent text-gray-100 flex flex-col items-center justify-center p-8">
-      <div className="glass p-12 rounded-2xl max-w-2xl w-full text-center">
-        <Command className="w-20 h-20 text-purple-500 mx-auto mb-8" />
-        <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-600 text-transparent bg-clip-text">
+    <div className="min-h-screen bg-black text-gray-100 flex flex-col items-center justify-center p-8">
+      <div className="border border-gray-800 bg-black/50 p-12 rounded-2xl max-w-2xl w-full text-center backdrop-blur-lg">
+        <Command className="w-20 h-20 text-blue-500 mx-auto mb-8" />
+        <h1 className="text-6xl font-bold mb-6 text-white">
           AI Tools Hub
         </h1>
-        <p className="text-xl text-gray-300 mb-10 leading-relaxed">
+        <p className="text-xl text-gray-400 mb-10 leading-relaxed">
           Your all-in-one platform for AI-powered Web3 interactions. Seamlessly integrate with blockchain tools, swap tokens, manage DeFi positions, and more.
         </p>
         <button 
           onClick={onGetStarted}
-          className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-10 py-4 rounded-xl text-lg font-semibold flex items-center gap-3 mx-auto glow transition-all duration-300 hover:scale-105"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-xl text-lg font-semibold flex items-center gap-3 mx-auto transition-all duration-300 hover:scale-105"
         >
           <Sparkles className="w-6 h-6" />
           Get Started
@@ -56,20 +56,20 @@ function ChatInterface() {
   };
 
   return (
-    <div className="min-h-screen bg-transparent text-gray-100 flex flex-col">
+    <div className="min-h-screen bg-black text-gray-100 flex flex-col">
       {/* Header */}
-      <div className="glass border-b border-gray-700/50">
+      <div className="border-b border-gray-800 bg-black/50 backdrop-blur-lg">
         <div className="max-w-[1920px] mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <Command className="w-8 h-8 text-purple-500" />
-            <h1 className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 text-transparent bg-clip-text">
+            <Command className="w-8 h-8 text-blue-500" />
+            <h1 className="text-xl font-bold text-white">
               AI Tools Hub
             </h1>
           </div>
-          <button className="glass px-6 py-3 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-colors duration-300">
-            <Wallet className="w-5 h-5 text-purple-400" />
+          <button className="border border-gray-800 bg-black/50 px-6 py-3 rounded-xl flex items-center gap-3 hover:bg-gray-900 transition-colors duration-300">
+            <Wallet className="w-5 h-5 text-blue-400" />
             <span className="text-gray-200">Connect Wallet</span>
-            <ChevronRight className="w-4 h-4 text-purple-400" />
+            <ChevronRight className="w-4 h-4 text-blue-400" />
           </button>
         </div>
       </div>
@@ -86,14 +86,14 @@ function ChatInterface() {
               <div
                 className={`max-w-3xl rounded-2xl px-6 py-4 ${
                   message.type === "user"
-                    ? "bg-gradient-to-r from-purple-600 to-pink-600 glow"
-                    : "message-glass"
+                    ? "bg-blue-600"
+                    : "bg-gray-900 border border-gray-800"
                 }`}
               >
                 {message.type === "bot" && (
                   <div className="flex items-center gap-2 mb-2">
-                    <Bot className="w-5 h-5 text-purple-400" />
-                    <span className="text-sm font-semibold text-purple-400">AI Assistant</span>
+                    <Bot className="w-5 h-5 text-blue-400" />
+                    <span className="text-sm font-semibold text-blue-400">AI Assistant</span>
                   </div>
                 )}
                 <p className="text-gray-100 leading-relaxed">{message.content}</p>
@@ -103,7 +103,7 @@ function ChatInterface() {
         </div>
 
         {/* Input */}
-        <div className="glass p-6 border-t border-gray-700/50">
+        <div className="border-t border-gray-800 bg-black/50 backdrop-blur-lg p-6">
           <div className="max-w-[1920px] mx-auto relative">
             <input
               type="text"
@@ -111,11 +111,11 @@ function ChatInterface() {
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && handleSend()}
               placeholder="Ask anything about Web3..."
-              className="w-full bg-gray-900/50 rounded-xl px-6 py-4 pr-14 focus:outline-none focus:ring-2 focus:ring-purple-500/50 placeholder-gray-400 text-gray-100"
+              className="w-full bg-gray-900 border border-gray-800 rounded-xl px-6 py-4 pr-14 focus:outline-none focus:ring-2 focus:ring-blue-500/50 placeholder-gray-400 text-gray-100"
             />
             <button 
               onClick={handleSend}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-purple-400 hover:text-purple-300 transition-colors duration-300"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-400 hover:text-blue-300 transition-colors duration-300"
             >
               <Send className="w-6 h-6" />
             </button>
