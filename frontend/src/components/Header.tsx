@@ -19,7 +19,7 @@ export default function Header({ onBack }: HeaderProps) {
               <span>Back to Models</span>
             </button>
           ) : (
-            <span className="font-semibold text-lg">DevAI Hub</span>
+            <span className="font-semibold text-lg">SwarmOS</span>
           )}
         </div>
         <div className="flex items-center space-x-6">

@@ -6,10 +6,10 @@ export default function Dashboard({ models, onSelectModel }) {
     <div className="container mx-auto px-4">
       <div className="max-w-4xl mx-auto text-center">
         <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
-          DevAI Hub
+          SwarmOS
         </h1>
         <p className="text-gray-400 mb-12 text-lg max-w-2xl mx-auto">
-          Access specialized AI models fine-tuned for development tools and frameworks
+          
         </p>
         
         <div className="grid gap-6 md:grid-cols-2 mt-8">

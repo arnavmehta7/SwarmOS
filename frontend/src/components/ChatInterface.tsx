@@ -10,32 +10,26 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 export const cn = (...classes: ClassValue[]) => twMerge(clsx(...classes));
 
-
 interface Message {
   role: 'user' | 'assistant';
   content: string;
 }
 
-export default function ChatInterface({ selectedModel }) {
+export default function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
-
-
   const CodeBlock = ({ className, children }: { className?: string; children: string }) => {
     const language = className ? className.replace('lang-', '') : 'text';
-    console.log(className);
     if (language.includes('cairo')) {
-    // Manually rendering the Cairo language as rust for highlighting
-    return (
-      <SyntaxHighlighter language={'rust'} style={vscDarkPlus}>
-        {children}
-      </SyntaxHighlighter>
-    );
-  } else {
-      // For inline code or other languages
+      return (
+        <SyntaxHighlighter language={'rust'} style={vscDarkPlus}>
+          {children}
+        </SyntaxHighlighter>
+      );
+    } else {
       const isInline = !className || className === 'language-text';
       const style = {
         backgroundColor: vscDarkPlus['code[class*="language-"]'].backgroundColor,
@@ -56,61 +50,57 @@ export default function ChatInterface({ selectedModel }) {
     }
   };
 
-
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
- 
-// ... existing code ...
 
-// ... existing code ...
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (!input.trim() || loading) return;
-
-  const userMessage = { role: 'user' as const, content: input };
-  setMessages(prev => [...prev, userMessage]);
-  setInput('');
-  setLoading(true);
-
-  const evtSource = new EventSource(`http://localhost:8000/stream_conversation?query=${encodeURIComponent(input)}`);
-
-  let accumulatedMessage = '';
-
-  evtSource.addEventListener("new_message", function (event) {
-    accumulatedMessage += event.data;
-    setMessages(prev => {
-      const newMessages = [...prev];
-      if (newMessages[newMessages.length - 1].role === 'assistant') {
-        newMessages[newMessages.length - 1].content = accumulatedMessage;
-      } else {
-        newMessages.push({ role: 'assistant', content: accumulatedMessage });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!input.trim() || loading) return;
+  
+    const userMessage = { role: 'user' as const, content: input };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput('');
+    setLoading(true);
+  
+    try {
+      // Use the backend URL from the .env file
+      const backendUrl = import.meta.env.VITE_BACKEND_URL;
+      console.log('Backend URL:', backendUrl); // Log the backend URL
+  
+      const response = await fetch(`${backendUrl}/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: input }),
+      });
+  
+      console.log('Response status:', response.status); // Log the response status
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-      return newMessages;
-    });
-  });
-
-  evtSource.addEventListener("error", function (event) {
-    console.error('Error fetching conversation:', event.data);
-    evtSource.close();
-  });
-
-  evtSource.addEventListener("end_event", function () {
-    evtSource.close();
-    setLoading(false);
-  });
-
-  return () => {
-    evtSource.close();
+  
+      const data = await response.json();
+      console.log('Response data:', data); // Log the response data
+  
+      const assistantMessage = { role: 'assistant' as const, content: data.response };
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error('Error fetching conversation:', error);
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant' as const, content: 'Error processing your request. Please try again.' },
+      ]);
+    } finally {
+      setLoading(false);
+    }
   };
-};
-
-// ... existing code ...
 
   if (messages.length === 0) {
     return (
@@ -119,10 +109,10 @@ const handleSubmit = async (e) => {
         <div className="flex-1 flex flex-col items-center justify-center px-4 h-[calc(100vh-8rem)] relative z-10">
           <div className="w-full max-w-2xl space-y-8">
             <div className="text-center space-y-2">
-              <h2 className="text-3xl font-bold text-white mb-2">Welcome to {selectedModel.name}</h2>
-              <p className="text-gray-400">{selectedModel.description}</p>
+              <h2 className="text-3xl font-bold text-white mb-2">Welcome to SwarmOS Chat</h2>
+              <p className="text-gray-400">Your AI-powered assistant</p>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="w-full">
               <div className="relative group">
                 <input
@@ -138,7 +128,7 @@ const handleSubmit = async (e) => {
                     }
                   }}
                 />
-                <button 
+                <button
                   type="submit"
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors disabled:opacity-50 disabled:hover:text-gray-400"
                   disabled={!input.trim() || loading}
@@ -224,7 +214,7 @@ const handleSubmit = async (e) => {
                 }
               }}
             />
-            <button 
+            <button
               type="submit"
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors disabled:opacity-50 disabled:hover:text-gray-400"
               disabled={!input.trim() || loading}

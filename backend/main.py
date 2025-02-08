@@ -86,8 +86,8 @@ def run_chat_mode(agent_executor, config):
             ):
                 if "agent" in chunk:
                     print(chunk["agent"]["messages"][0].content)
-                elif "tools" in chunk:
-                    print(chunk["tools"]["messages"][0].content)
+                # elif "tools" in chunk:
+                #     print(chunk["tools"]["messages"][0].content)
                 print("-------------------")
 
         except KeyboardInterrupt:
