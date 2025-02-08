@@ -12,6 +12,11 @@ from langgraph.prebuilt import create_react_agent
 from cdp_langchain.agent_toolkits import CdpToolkit
 from cdp_langchain.utils import CdpAgentkitWrapper
 
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import uvicorn
+
 # Configure a file to persist the agent's CDP MPC Wallet Data.
 wallet_data_file = "wallet_data.txt"
 load_dotenv()
@@ -33,7 +38,7 @@ def initialize_agent():
         # If there is a persisted agentic wallet, load it and pass to the CDP Agentkit Wrapper.
         values = {"cdp_wallet_data": wallet_data}
         
-    agentkit = CdpAgentkitWrapper(**values, network_id=None)
+    agentkit = CdpAgentkitWrapper(**values, network_id="ethereum-mainnet")
     wallet_data = agentkit.export_wallet()
 
     with open(wallet_data_file, "w") as f:
@@ -102,6 +107,46 @@ response:
    
 '''
 
+'''FASTAPI SHI STARTS HERE'''
+app = FastAPI()
+
+class ChatRequest(BaseModel):
+    message: str
+
+# Initialize the agent executor and config
+agent_executor, config = initialize_agent()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # Update if frontend runs elsewhere
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.post("/chat")
+async def chat_endpoint(chat_req: ChatRequest):
+    """
+    Receives a chat request, sends it to the agent_executor, and returns the response.
+    """
+    try:
+        responses = []
+        # Process the agent's response stream.
+        for chunk in agent_executor.stream(
+            {"messages": [HumanMessage(content=chat_req.message)]},
+            config
+        ):
+            if "agent" in chunk:
+                responses.append(chunk["agent"]["messages"][0].content)
+            elif "tools" in chunk:
+                responses.append(chunk["tools"]["messages"][0].content)
+        final_response = "\n".join(responses)
+        for response in responses:
+            print(response)
+        return {"response": final_response}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
 
 def main():
     """Start the chatbot agent."""
@@ -111,4 +156,4 @@ def main():
 
 if __name__ == "__main__":
     print("Starting Agent...")
-    main()
+    uvicorn.run(app, host="0.0.0.0", port=8000)
