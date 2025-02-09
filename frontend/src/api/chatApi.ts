@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/chat";
+const API_URL = import.meta.env.VITE_BACKEND_URL + "/chat";
 
 export const sendMessage = async (message: string) => {
   try {
