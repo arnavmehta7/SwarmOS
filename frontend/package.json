@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@coinbase/onchainkit": "^0.36.10",
+    "@wagmi/core": "^2.16.4",
     "axios": "^1.7.9",
     "clsx": "^2.1.1",
     "lucide-react": "^0.344.0",
@@ -18,7 +20,8 @@
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
     "react-syntax-highlighter": "^15.6.1",
-    "tailwind-merge": "^2.5.4"
+    "tailwind-merge": "^2.5.4",
+    "viem": "^2.22.23"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

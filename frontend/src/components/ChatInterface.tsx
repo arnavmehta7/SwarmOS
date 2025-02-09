@@ -21,18 +21,25 @@ export default function ChatInterface() {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
-  const CodeBlock = ({ className, children }: { className?: string; children: string }) => {
+  const CodeBlock = ({
+    className,
+    children,
+  }: {
+    className?: string;
+    children: string;
+  }) => {
     const language = className ? className.replace('lang-', '') : 'text';
     if (language.includes('cairo')) {
       return (
-        <SyntaxHighlighter language={'rust'} style={vscDarkPlus}>
+        <SyntaxHighlighter language="rust" style={vscDarkPlus}>
           {children}
         </SyntaxHighlighter>
       );
     } else {
       const isInline = !className || className === 'language-text';
       const style = {
-        backgroundColor: vscDarkPlus['code[class*="language-"]'].backgroundColor,
+        backgroundColor:
+          vscDarkPlus['code[class*="language-"]'].backgroundColor,
         color: vscDarkPlus['code[class*="language-"]'].color,
         padding: '0.2em 0.4em',
         borderRadius: '3px',
@@ -61,17 +68,16 @@ export default function ChatInterface() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim() || loading) return;
-  
+
     const userMessage = { role: 'user' as const, content: input };
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setLoading(true);
-  
+
     try {
-      // Use the backend URL from the .env file
       const backendUrl = import.meta.env.VITE_BACKEND_URL;
-      console.log('Backend URL:', backendUrl); // Log the backend URL
-  
+      console.log('Backend URL:', backendUrl);
+
       const response = await fetch(`${backendUrl}/chat`, {
         method: 'POST',
         headers: {
@@ -79,23 +85,30 @@ export default function ChatInterface() {
         },
         body: JSON.stringify({ message: input }),
       });
-  
-      console.log('Response status:', response.status); // Log the response status
-  
+
+      console.log('Response status:', response.status);
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
+
       const data = await response.json();
-      console.log('Response data:', data); // Log the response data
-  
-      const assistantMessage = { role: 'assistant' as const, content: data.response };
+      console.log('Response data:', data);
+
+      const assistantMessage = {
+        role: 'assistant' as const,
+        content: data.response,
+      };
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Error fetching conversation:', error);
       setMessages((prev) => [
         ...prev,
-        { role: 'assistant' as const, content: 'Error processing your request. Please try again.' },
+        {
+          role: 'assistant' as const,
+          content:
+            'Error processing your request. Please try again.',
+        },
       ]);
     } finally {
       setLoading(false);
@@ -109,8 +122,12 @@ export default function ChatInterface() {
         <div className="flex-1 flex flex-col items-center justify-center px-4 h-[calc(100vh-8rem)] relative z-10">
           <div className="w-full max-w-2xl space-y-8">
             <div className="text-center space-y-2">
-              <h2 className="text-3xl font-bold text-white mb-2">Welcome to SwarmOS Chat</h2>
-              <p className="text-gray-400">Your AI-powered assistant</p>
+              <h2 className="text-3xl font-bold text-white mb-2">
+                Welcome to SwarmOS Chat
+              </h2>
+              <p className="text-gray-400">
+                Your AI-powered assistant
+              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="w-full">
@@ -155,13 +172,17 @@ export default function ChatInterface() {
                   <div className="flex flex-row items-center space-x-2">
                     <div
                       className={cn(
-                        'text-black dark:text-white',
-                        index === messages.length - 1 && loading ? 'animate-spin' : 'animate-none',
+                        'text-white',
+                        index === messages.length - 1 && loading
+                          ? 'animate-spin'
+                          : 'animate-none'
                       )}
                     >
                       <SendHorizontal className="w-5 h-5" />
                     </div>
-                    <h3 className="text-black dark:text-white font-medium text-xl">Answer</h3>
+                    <h3 className="text-white font-medium text-xl">
+                      Answer
+                    </h3>
                   </div>
                   <Markdown
                     options={{
@@ -173,7 +194,7 @@ export default function ChatInterface() {
                     }}
                     className={cn(
                       'prose dark:prose-invert prose-p:leading-relaxed prose-pre:p-0',
-                      'max-w-none break-words text-black dark:text-white text-sm md:text-base font-medium',
+                      'max-w-none break-words text-white text-sm md:text-base font-medium'
                     )}
                   >
                     {message.content}
@@ -199,7 +220,10 @@ export default function ChatInterface() {
           <div ref={messagesEndRef} />
         </div>
 
-        <form onSubmit={handleSubmit} className="p-4 border-t border-gray-800/50 backdrop-blur-sm">
+        <form
+          onSubmit={handleSubmit}
+          className="p-4 border-t border-gray-800/50 backdrop-blur-sm"
+        >
           <div className="relative">
             <input
               type="text"
