@@ -10,7 +10,7 @@ const wagmiConfig = createConfig({
   chains: [baseSepolia],
   connectors: [
     coinbaseWallet({
-      appName: 'onchainkit',
+      appName: 'SwarmOS',
     }),
   ],
   ssr: true,
