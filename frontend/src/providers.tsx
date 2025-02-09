@@ -1,12 +1,12 @@
 'use client';
 import { ReactNode } from 'react';
 import { OnchainKitProvider } from '@coinbase/onchainkit';
-import { baseSepolia } from 'wagmi/chains';
+import { base } from 'wagmi/chains';
 import { WagmiProvider, createConfig, http } from 'wagmi';
 import { coinbaseWallet } from 'wagmi/connectors';
 
 const wagmiConfig = createConfig({
-  chains: [baseSepolia],
+  chains: [base],
   connectors: [
     coinbaseWallet({
       appName: 'SwarmOS',
@@ -14,7 +14,7 @@ const wagmiConfig = createConfig({
   ],
   ssr: true,
   transports: {
-    [baseSepolia.id]: http(),
+    [base.id]: http(),
   },
 });
 
@@ -23,7 +23,7 @@ export function Providers({ children }: { children: ReactNode }) {
     <OnchainKitProvider
       apiKey={import.meta.env.VITE_PUBLIC_ONCHAINKIT_API_KEY}
       projectId={import.meta.env.VITE_PUBLIC_CDP_PROJECT_ID}
-      chain={baseSepolia}
+      chain={base}
     >
       <WagmiProvider config={wagmiConfig}>
         {children}
