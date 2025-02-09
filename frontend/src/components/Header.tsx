@@ -1,6 +1,7 @@
 import React from 'react';
 import { Bell, User, ArrowLeft } from 'lucide-react';
 import { WalletConnector } from './WalletConnector';
+import { FundButton } from '@coinbase/onchainkit/fund';
 
 interface HeaderProps {
   onBack?: () => void;
@@ -26,6 +27,7 @@ export default function Header({ onBack }: HeaderProps) {
         <div className="flex items-center space-x-6">
           <Bell className="w-5 h-5 text-gray-400 hover:text-white transition-colors cursor-pointer" />
           <WalletConnector />
+          <FundButton />
           <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-700 transition-colors">
             <User className="w-4 h-4" />
           </div>

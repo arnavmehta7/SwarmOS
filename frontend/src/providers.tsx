@@ -1,5 +1,4 @@
 'use client';
-
 import { ReactNode } from 'react';
 import { OnchainKitProvider } from '@coinbase/onchainkit';
 import { baseSepolia } from 'wagmi/chains';
@@ -23,6 +22,7 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <OnchainKitProvider
       apiKey={import.meta.env.VITE_PUBLIC_ONCHAINKIT_API_KEY}
+      projectId={import.meta.env.VITE_PUBLIC_CDP_PROJECT_ID}
       chain={baseSepolia}
     >
       <WagmiProvider config={wagmiConfig}>
