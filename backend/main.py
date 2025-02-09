@@ -38,7 +38,7 @@ def initialize_agent():
         # If there is a persisted agentic wallet, load it and pass to the CDP Agentkit Wrapper.
         values = {"cdp_wallet_data": wallet_data}
         
-    agentkit = CdpAgentkitWrapper(**values, network_id="ethereum-mainnet")
+    agentkit = CdpAgentkitWrapper(**values, network_id="base-mainnet")
     wallet_data = agentkit.export_wallet()
 
     with open(wallet_data_file, "w") as f:
