@@ -138,8 +138,8 @@ async def chat_endpoint(chat_req: ChatRequest):
         ):
             if "agent" in chunk:
                 responses.append(chunk["agent"]["messages"][0].content)
-            elif "tools" in chunk:
-                responses.append(chunk["tools"]["messages"][0].content)
+            # elif "tools" in chunk:
+            #     responses.append(chunk["tools"]["messages"][0].content)
         final_response = "\n".join(responses)
         for response in responses:
             print(response)
