@@ -126,7 +126,7 @@ export default function ChatInterface() {
                 Welcome to SwarmOS Chat
               </h2>
               <p className="text-gray-400">
-                Your AI-powered assistant
+              We simplify on-chain base interactions by using AI Agents
               </p>
             </div>
 
